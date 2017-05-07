@@ -1,0 +1,54 @@
+<html>
+<head>
+  <meta charset="UTF-8" />
+
+  <script src="https://fb.me/react-0.13.3.js"></script>
+  <script src="https://fb.me/JSXTransformer-0.13.3.js"></script>
+  <!-- Latest compiled and minified CSS -->
+  <title>Titans</title>
+</head>
+<body>
+  <h1>hola</h1>
+  <section id="container"></section>
+
+  <img src="gods/ares.png" class="img-responsive" >
+  <script type="text/jsx;harmony=true">
+  var gods = [
+    { number:1,name:'ares'},
+    { number:2,name:'poseidon'},
+    { number:3,name:'athena'},
+    { number:4,name:'zeus'},
+    { number:5,name:'kronos'}
+  ];
+  class GodRow extends React.Component {
+    render() {
+      var godurl=`gods/${this.props.name}.png`;
+      return <div>
+      <img src={godurl} class="img-responsive" width="100%" />
+      </div>
+    }
+  }
+  class GodTable extends React.Component {
+    render () {
+      return <table>
+      {
+        this.props.gods.map((god) => {
+          return <tr>
+          <td>
+          <GodRow name={god.name}/>
+          </td>
+          </tr>
+        })
+      }
+      </table>
+    }
+  }
+
+  React.render(
+    <GodTable gods={gods} />,
+    document.getElementById('container')
+  )
+  </script>
+</body>
+
+</html>
