@@ -1,54 +1,100 @@
+<!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8" />
-
-  <script src="https://fb.me/react-0.13.3.js"></script>
-  <script src="https://fb.me/JSXTransformer-0.13.3.js"></script>
-  <!-- Latest compiled and minified CSS -->
-  <title>Titans</title>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>VueJS</title>
+	<link rel="stylesheet" href="">
+	<script src="js/vue.js"></script>
+	<script src="js/cyclades.js"></script>
 </head>
 <body>
-  <h1>hola</h1>
-  <section id="container"></section>
+<div id="app">
+	<table>
+		<tr>
+			<td style="width: 25% ; " valign=top>
+				<label htmlFor="tipo">Tipo : </label>
+				<select v-model="tipo" @change="onChangeTipo()" >
+				<option v-for="item in tipos"  v-bind:value="item"  >	{{ item.name }} </option>  
+				</select>
+			<br>
+				<label htmlFor="jugadores"  >Jugadores : </label>
+				<select v-model="players" @change="onChangePlayers()">
+				<option v-for="n in tipo.jugadores"   v-bind:value="n">{{n}} </option>      
+				</select> 
+			<br><br>
+				<button v-on:click="randomGods()"  > Siguiente Turno</button>
+			 
+			<br>
+			<h1>Turno:<br>{{turno}}</h1>
+		
+			</td>	
+			<td>
+					<table>
+							<tbody>
+								<template v-for="item in activeGods">
+									<tr>
+										<td> 
+											<img v-bind:src="generarUrl(item)"  width="75%" height="75%" />  
+										</td>
+									</tr>
+								</template>
+							</tbody>
+						</table>	
 
-  <img src="gods/ares.png" class="img-responsive" >
-  <script type="text/jsx;harmony=true">
-  var gods = [
-    { number:1,name:'ares'},
-    { number:2,name:'poseidon'},
-    { number:3,name:'athena'},
-    { number:4,name:'zeus'},
-    { number:5,name:'kronos'}
-  ];
-  class GodRow extends React.Component {
-    render() {
-      var godurl=`gods/${this.props.name}.png`;
-      return <div>
-      <img src={godurl} class="img-responsive" width="100%" />
-      </div>
-    }
-  }
-  class GodTable extends React.Component {
-    render () {
-      return <table>
-      {
-        this.props.gods.map((god) => {
-          return <tr>
-          <td>
-          <GodRow name={god.name}/>
-          </td>
-          </tr>
-        })
-      }
-      </table>
-    }
-  }
+			</td>	
+		</tr>
+	</table>		
+</div>
+<script>	
+	new Vue({
+	el: '#app',
+	data: {
+		godurl:'https://edisaac.github.io/gods/',
+		tipo:{},
+		players:0,
+		turno:0,		
+		activeGods:[  ],
+		playableGods:[],
+		cant:0,
+		tipos: [{id:1,name:'Normal',jugadores:[2,3,4,5]},
+				{id:2,name:'Titans',jugadores:[2,3,4,5,6]}]   
+	  }, 
+	methods:{  
+		randomGods:function(){
+			let firstGod=this.activeGods[0];					
+			let gods=shuffle(this.playableGods); 
+			if (this.cant<gods.length){
+				gods=gods.filter((god)=>god!==firstGod);
+				gods.push(firstGod);    
+			}
+			this.activeGods = gods.filter((god,index)=>index<this.cant);	
+			this.turno++; 
+		},
+		generarUrl:function(god){
+			return this.godurl+god+'.png';
+		},
+		onChangeTipo:function(){
+			if (this.tipo.name==='Normal' ){
+				this.playableGods=[ 'ares' ,'poseidon' , 'athena' ,'zeus' ];
+			}else {
+				this.playableGods=[ 'ares' ,'poseidon' , 'athena' ,'zeus' , 'kronos' ];				
+			}
+			this.players=0;	
+			this.turno=0;
+			this.activeGods=[  ];
+		},
+		onChangePlayers:function(){
+			this.cant=cantidadActiva(this.playableGods,this.players);
+			this.playableGods=shuffle(this.playableGods);			
+			this.turno=0;
+			this.activeGods=[  ];
+		}
+	}
+});
 
-  React.render(
-    <GodTable gods={gods} />,
-    document.getElementById('container')
-  )
-  </script>
+
+
+</script>
 </body>
-
 </html>
