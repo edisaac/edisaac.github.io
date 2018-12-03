@@ -3,48 +3,44 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>VueJS</title>
-	<link rel="stylesheet" href="">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
 	<script src="js/vue.js"></script>
 	<script src="js/cyclades.js"></script>
 </head>
 <body>
 <div id="app">
-	<table>
-		<tr>
-			<td style="width: 25% ; " valign=top>
+			<span>
 				<label htmlFor="tipo">Tipo : </label>
 				<select v-model="tipo" @change="onChangeTipo()" >
 				<option v-for="item in tipos"  v-bind:value="item"  >	{{ item.name }} </option>  
 				</select>
-			<br>
+			
 				<label htmlFor="jugadores"  >Jugadores : </label>
 				<select v-model="players" @change="onChangePlayers()">
 				<option v-for="n in tipo.jugadores"   v-bind:value="n">{{n}} </option>      
-				</select> 
-			<br><br>
-				<button v-on:click="randomGods()"  > Siguiente Turno</button>
-			 
+				</select> 		
+				<button v-on:click="randomGods()" class="btn btn-default"  > Siguiente Turno</button>
+		 
 			<br>
-			<h1>Turno:<br>{{turno}}</h1>
-		
-			</td>	
-			<td>
+			<h1>Turno: {{turno}}</h1>
+		</span>
+			 
 					<table>
 							<tbody>
 								<template v-for="item in activeGods">
 									<tr>
 										<td> 
-											<img v-bind:src="generarUrl(item)"  width="75%" height="75%" />  
+											<img v-bind:src="generarUrl(item)"  width="100%" />  
 										</td>
 									</tr>
 								</template>
 							</tbody>
 						</table>	
-
-			</td>	
-		</tr>
-	</table>		
+  	
 </div>
 <script>	
 	new Vue({
